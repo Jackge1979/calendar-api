@@ -10,7 +10,7 @@ export const FEAST = {"1-1":"元旦节","2-14":"情人节","3-5":"雷锋日","3-
 export const LUNAR = {
     
     //template
-    tpl: `#{y}-#{m}-#{d} 星期#{W} 农历 #{CM}#{CD} #{gy}(#{sx}) #{gm} #{gd} #{so} #{cf} #{gf}`,
+    tpl: '#{y}-#{m}-#{d} 星期#{W} 农历 #{CM}#{CD} #{gy}(#{sx}) #{gm} #{gd} #{so} #{cf} #{gf}',
 
     
     //闰月: leap[y-1900] & 0xf，闰月天数: leap[y-1900] & 0x10000
