@@ -1,4 +1,4 @@
-// https://github.com/leecade/date/blob/master/src/g.date.js
+//参考资料： https://github.com/leecade/date/blob/master/src/g.date.js
 
 import { DAYS, FEAST, LUNAR, ISL } from './data.es6'
 

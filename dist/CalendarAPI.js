@@ -8,8 +8,9 @@
 String.prototype.parseToArray = function (bit, s) {
     var ret = this.split(s || "|");
     return bit ? function (l, n) {
-        for (; l--;) ret[l] = parseInt(ret[l], bit);
-        return ret;
+        for (; l--;) {
+            ret[l] = parseInt(ret[l], bit);
+        }return ret;
     }(ret.length) : ret;
 };
 
@@ -19,7 +20,7 @@ String.trim || (String.prototype.trim = function () {
         str = str.replace(/^\s\s*/, ''),
         ws = /\s/,
         i = str.length;
-    while (ws.test(str.charAt(--i)));
+    while (ws.test(str.charAt(--i))) {}
     return str.slice(0, i + 1);
 });
 
@@ -31,10 +32,10 @@ String.replaceTpl || (String.prototype.replaceTpl = function (o) {
 });
 
 // 公历节日
-const FEAST = { "1-1": "元旦节", "2-14": "情人节", "3-5": "雷锋日", "3-8": "妇女节", "3-12": "植树节", "3-15": "消费日", "4-1": "愚人节", "5-1": "劳动节", "5-4": "青年节", "6-1": "儿童节", "7-1": "建党节", "8-1": "建军节", "9-10": "教师节", "10-1": "国庆节", "12-24": "平安夜", "12-25": "圣诞节"
+var FEAST = { "1-1": "元旦节", "2-14": "情人节", "3-5": "雷锋日", "3-8": "妇女节", "3-12": "植树节", "3-15": "消费日", "4-1": "愚人节", "5-1": "劳动节", "5-4": "青年节", "6-1": "儿童节", "7-1": "建党节", "8-1": "建军节", "9-10": "教师节", "10-1": "国庆节", "12-24": "平安夜", "12-25": "圣诞节"
 
     //农历
-};const LUNAR = {
+};var LUNAR = {
 
     //template
     tpl: '#{y}-#{m}-#{d} 星期#{W} 农历 #{CM}#{CD} #{gy}(#{sx}) #{gm} #{gd} #{so} #{cf} #{gf}',
@@ -74,7 +75,7 @@ const FEAST = { "1-1": "元旦节", "2-14": "情人节", "3-5": "雷锋日", "3-
     //伊历
 };
 
-// https://github.com/leecade/date/blob/master/src/g.date.js
+//参考资料： https://github.com/leecade/date/blob/master/src/g.date.js
 
 /**
 *  检查是否date对象
@@ -110,9 +111,12 @@ function getDate(date) {
 *  @notice: 为区分minute, month对应大写M
 *  @notice: 位数不全: 1. 年份 "yyyy" --> 2011, "yyy" --> 011, "y" --> 1; 2. 其他均为 single --> 不补0, double --> 补0
 */
-function format(date = new Date(), pattern = 'yyyy-MM-dd hh:mm:ss') {
+function format() {
+    var date = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : new Date();
+    var pattern = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 'yyyy-MM-dd hh:mm:ss';
+
     if (date === '' && !isDate(date)) return;
-    let d = getDate(date),
+    var d = getDate(date),
         dateObj = {
         M: d.m,
         d: d.d,
@@ -120,11 +124,20 @@ function format(date = new Date(), pattern = 'yyyy-MM-dd hh:mm:ss') {
         m: date.getMinutes(),
         s: date.getSeconds()
     };
-    for (let k in dateObj) {
-        pattern = pattern.replace(new RegExp('(' + k + '+)', 'g'), (a, b) => dateObj[k] < 10 && b.length > 0 ? '0' + dateObj[k] : dateObj[k]);
+
+    var _loop = function _loop(k) {
+        pattern = pattern.replace(new RegExp('(' + k + '+)', 'g'), function (a, b) {
+            return dateObj[k] < 10 && b.length > 0 ? '0' + dateObj[k] : dateObj[k];
+        });
+    };
+
+    for (var k in dateObj) {
+        _loop(k);
     }
 
-    return pattern.replace(/(y+)/ig, (a, b) => (d.y + '').substr(4 - Math.min(4, b.length)));
+    return pattern.replace(/(y+)/ig, function (a, b) {
+        return (d.y + '').substr(4 - Math.min(4, b.length));
+    });
 }
 
 /**
@@ -190,7 +203,7 @@ function getDaysByYear(y) {
 *  @return: {m:month, d:year}
 */
 function getDateBySolar(y, n) {
-    let d = new Date(31556925974.7 * (y - 1900) + LUNAR.jqmap[n] * 60000 + Date.UTC(1900, 0, 6, 2, 5));
+    var d = new Date(31556925974.7 * (y - 1900) + LUNAR.jqmap[n] * 60000 + Date.UTC(1900, 0, 6, 2, 5));
     return {
         m: d.getUTCMonth() + 1,
         d: d.getUTCDate()
@@ -208,7 +221,7 @@ function getDateBySolar(y, n) {
 *  @notice: 年、月、日须与type保持一致，当且仅当需要匹配“除夕”，才需传y(年份)
 */
 function getFeast(m, d, type, y) {
-    let name = (type ? LUNAR.feast : FEAST)[m + '-' + d] || "";
+    var name = (type ? LUNAR.feast : FEAST)[m + '-' + d] || "";
     //fix"除夕"(农历12月最后一天)
     type && y && m == 12 && getDaysByLunarMonth(y, 12) == d && (name = '除夕');
     return name;
@@ -223,9 +236,9 @@ function getFeast(m, d, type, y) {
 *  @return: {String} || ""
 */
 function getSolar(y, m, d) {
-    let solarNames = LUNAR.jqnames,
+    var solarNames = LUNAR.jqnames,
         l = solarNames.length,
-        solarName;
+        solarName = void 0;
     while (l--) {
         solarName = getDateBySolar(y, l);
         if (solarName.m == m && solarName.d == d) return solarNames[l];
@@ -255,7 +268,7 @@ function cyclical(n) {
 function fixResult(data, Y, M, D, y, m, d) {
     if (data && data.length) {
         var l = data.length,
-            _match = function (y, m, d, str, pre, suf) {
+            _match = function _match(y, m, d, str, pre, suf) {
             str = str.split("~");
             str[1] = str[1] || str[0];
             pre = str[0].split("-");
@@ -362,7 +375,7 @@ function toLunar(Y, M, D) {
 *  @return: {gy:干支年, gm:干支月, gd:干支日}
 */
 function toGz(y, m, d) {
-    let M = m - 1;
+    var M = m - 1;
     return {
         gy: M >= 2 || M == 1 && d >= getDateBySolar(y, 2).d ? cyclical(y - 1864) : cyclical(y - 1865),
         gm: d >= getDateBySolar(y, m * 2).d ? cyclical((y - 1900) * 12 + M + 13) : cyclical((y - 1900) * 12 + M + 12),
@@ -391,23 +404,30 @@ function toSx(y, m, d) {
 *  @return: {y: 年,m: 月,d: 日,w: 星期（数字）,W: 星期（中文）,cm: 农历月（数字）,cd: 农历日（数字）,CM: 农历月（中文）,CD: 农历日（中文）,gy: 干支年,gm: 干支月,gd: 干支日,so: 节气,cf: 农历节日,gf: 公历节日,sx: 生肖,isleap: 是否闰月}
 */
 function formatLunar(y, m, d) {
-    let gz = toGz(y, m, d),
+    var gz = toGz(y, m, d),
         //干支
     lunar = toLunar(y, m, d),
         //农历
     w = new Date(y, m - 1, d).getDay(); //星期
-    const { cm, cd, cy, isleap, CM, CD } = lunar;
-    const { wk, sx } = LUNAR;
+    var cm = lunar.cm,
+        cd = lunar.cd,
+        cy = lunar.cy,
+        isleap = lunar.isleap,
+        CM = lunar.CM,
+        CD = lunar.CD;
+    var wk = LUNAR.wk,
+        sx = LUNAR.sx;
+
     return {
-        y, //年
-        m, //月
-        d, //日
-        w, //星期（数字）
+        y: y, //年
+        m: m, //月
+        d: d, //日
+        w: w, //星期（数字）
         W: wk.charAt(w), //星期（中文）
-        cm, //农历月（数字）
-        cd, //农历日（数字）
-        CM, //农历月（中文）
-        CD, //农历日（中文）
+        cm: cm, //农历月（数字）
+        cd: cd, //农历日（数字）
+        CM: CM, //农历月（中文）
+        CD: CD, //农历日（中文）
 
         gy: gz.gy + '年', //干支纪年
         gm: gz.gm + '月', //干支纪月
@@ -417,7 +437,7 @@ function formatLunar(y, m, d) {
         cf: getFeast(cm, cd, 1, cy), //农历节日
         gf: getFeast(m, d), //公历节日
         sx: sx.charAt((cy - 4) % 12), //生肖
-        isleap //是否闰月
+        isleap: isleap //是否闰月
     };
 }
 
@@ -453,8 +473,8 @@ function lunarTpl(y, m, d, tpl) {
 
 // debug
 function debug(y, m) {
-    let l = getDaysByMonth(y, m);
-    for (let i = 0; i < l; i++) {
+    var l = getDaysByMonth(y, m);
+    for (var i = 0; i < l; i++) {
         console.log(lunarTpl(y, m, i + 1));
     }
 }
