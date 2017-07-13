@@ -1,7 +1,7 @@
 # 万年历API接口
 [![](https://img.shields.io/github/downloads/atom/atom/total.svg)](https://github.com/huangguangjie/calendar-api/archive/master.zip)
 
-## 安装使用
+### 安装使用
 ```html
 <script src="<url>/calendar-api.js"></script>
 ```
@@ -15,7 +15,7 @@ use
 import { isDate, ...API } from 'calendar-api'
 ```
 
-## API Methods
+### API Methods
 isDate：检查是否date对象
 
 getDate：获取日期
