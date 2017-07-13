@@ -1,4 +1,12 @@
 {
+  "name": "CalendarAPI",
+  "version": "1.0.0",
+  "entry point": "index.js",
+  "git repository": "git@github.com:huangguangjie/calendar-api.git",
+  "keyword": "calendar,api",
+  "main": "dist/CalendarAPI.js",
+  "author": "huangguangjie",
+  "license": "ISC",
   "scripts": {
     "dev": "rollup -w -c config.js"
   },
